@@ -25,8 +25,10 @@ exports.requestOtp = async (req, res) => {
       digits: true
     });
 
+     await OTP.destroy({ where: { email } });
+
     // 3️⃣ Save OTP in DB (overwrite if already exists for that email)
-    await OTP.upsert({
+    await OTP.create({
       email,
       otp,
       expiresAt: new Date(Date.now() + 5 * 60 * 1000),
@@ -48,7 +50,7 @@ exports.requestOtp = async (req, res) => {
       text: `Your One-Time Password (OTP) is: ${otp}\n\nThis will expire in 5 minutes.`,
     });
 
-    res.json({ message: "✅ OTP sent successfully" });
+    res.json({ message: "✅ OTP sent successfully" , OTP: otp});
   } catch (error) {
     console.error("❌ Error sending OTP:", error);
     res.status(500).json({ error: "Failed to send OTP" });
@@ -75,9 +77,10 @@ exports.forgotPasswordRequestOtp = async (req, res) => {
       specialChars: false,
       digits: true,
     });
+    await OTP.destroy({ where: { email } });
 
     // save or update OTP
-    await OTP.upsert({
+    await OTP.create({
       email,
       otp,
       expiresAt: new Date(Date.now() + 5 * 60 * 1000),

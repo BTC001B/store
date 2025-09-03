@@ -366,36 +366,29 @@ const todayOrderCount = await OrderItem.count({
       ]
     });
 
-  const rawData = await OrderItem.findAll({
-      attributes: [
-        [fn("DATE", col("order.createdAt")), "date"],
-        [fn("SUM", col("OrderItem.quantity")), "totalSold"]
-      ],
-      include: [
-        {
-          model: Product,
-          as: "product",
-          attributes: [],
-          where: { sellerId }
-        },
-        {
-          model: Order,
-          as: "order",
-          attributes: [],
-          where: {
-            createdAt: {
-              [Op.between]: [
-                literal("CURRENT_DATE - INTERVAL '1 month'"), // last month
-                literal("CURRENT_DATE") // today
-              ]
-            }
-          }
-        }
-      ],
-      group: [fn("DATE", col("order.createdAt"))],
-      order: [[fn("DATE", col("order.createdAt")), "ASC"]],
-      raw: true
-    });
+const rawData = await OrderItem.findAll({
+  attributes: [
+    [fn("DATE", col("order.createdAt")), "date"],
+    [fn("SUM", col("OrderItem.quantity")), "totalSold"]
+  ],
+  include: [
+    {
+      model: Product,
+      as: "product",
+      attributes: []
+    },
+    {
+      model: Order,
+      as: "order",
+      attributes: []
+    }
+  ],
+  group: [fn("DATE", col("order.createdAt"))],
+  raw: true
+});
+
+console.log("TEST DATA:", rawData);
+
 
     // 2. Map DB result into an object for quick lookup
     const salesMap = {};

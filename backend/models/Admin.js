@@ -10,6 +10,7 @@ const Admin = sequelize.define("Admin", {
   isActive: { type: DataTypes.BOOLEAN, defaultValue: true },
 }, {
   timestamps: true,
+  tableName: "admins"
 });
 
 module.exports = Admin;

@@ -32,7 +32,7 @@ router.get("/analytics/category-performance", authMiddleware(["admin", "superadm
 
 router.put("/seller/:sellerId",authMiddleware(["admin", "superadmin"]),adminController.giveAccesstoSeller)
 
-router.get("/all", authMiddleware(["admin"]), sellerController.getAllSellers);
+router.get("/seller/all", authMiddleware(["admin"]), sellerController.getAllSellers);
 router.get("/id/:id", authMiddleware(["admin"]), sellerController.getSellerById);
 router.delete("/delete/:id", authMiddleware(["admin"]), sellerController.deleteSeller);
 

@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const reviewController = require("../controllers/reviewController");
+const upload = require("../middleware/upload");
 
 // Post a Review
-router.post("/", reviewController.createReview);
+router.post("/",upload.array("images", 5), reviewController.createReview);
 
 // Get Reviews by Product ID
 router.get("/product/:productId", reviewController.getReviewsByProduct);

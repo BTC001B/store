@@ -34,6 +34,10 @@ const Review = sequelize.define("Review", {
   comment: {
     type: DataTypes.TEXT,
     allowNull: true
+  },
+  images:{
+    type:DataTypes.JSON,
+    allowNull:false
   }
 }, {
   timestamps: true,

@@ -2,24 +2,38 @@
 const User = require("../models/User");
 const Review = require("../models/Review");
 
-// ✅ Post a Review
+
 exports.createReview = async (req, res) => {
   try {
     const { productId, userId, rating, comment } = req.body;
+
     if (!productId || !userId || !rating) {
       return res.status(400).json({ error: "productId, userId, and rating are required" });
     }
 
-    const review = await Review.create({ productId, userId, rating, comment });
+    // Collect uploaded image paths (relative, not absolute)
+    let imageUrls = [];
+    if (req.files && req.files.length > 0) {
+      imageUrls = req.files.map(file => `/uploads/reviews/${file.filename}`);
+    }
+
+    const review = await Review.create({
+      productId,
+      userId,
+      rating,
+      comment,
+      images: imageUrls // assuming `images` is a JSON/ARRAY column in Review model
+    });
+
     res.json({ message: "Review added successfully", review });
+
   } catch (error) {
     console.error("Error in createReview:", error);
     res.status(500).json({ error: "Server error" });
   }
 };
 
-// ✅ Get Reviews by Product ID
-// Get Reviews by Product ID
+
 exports.getReviewsByProduct = async (req, res) => {
   try {
     const { productId } = req.params;

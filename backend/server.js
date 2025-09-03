@@ -14,6 +14,8 @@ const Review=require("./models/Review");
 const Profile = require("./models/Profile");
 const SearchHistory=require("./models/SearchHistory");
 const Seller=require("./models/Seller");
+const Complaint=require("./models/Complaint");
+const Admin=require("./models/Admin");
 const authRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
@@ -26,6 +28,7 @@ const profileRoutes=require("./routes/profileRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const searchRoutes=require("./routes/searchRoutes");
 const sellerRoutes = require("./routes/sellerRoutes");
+const complaintRoutes = require("./routes/complaintRoutes");
 
 
 
@@ -50,6 +53,9 @@ app.use("/api/profile",profileRoutes);
 app.use("/api/admin",adminRoutes);
 app.use("/api/searchbar",searchRoutes);
 app.use("/api/seller",sellerRoutes);
+app.use("/api/complaint",complaintRoutes);
+app.use("/uploads", express.static("uploads"));
+
 
 
 
@@ -88,6 +94,20 @@ SearchHistory.belongsTo(User, { foreignKey: "userId", as: "user" });
 
 Seller.hasMany(Brand, { foreignKey: "sellerId", });
 Brand.belongsTo(Seller, { foreignKey: "sellerId" });
+
+Complaint.belongsTo(User, { foreignKey: "raisedByUserId", as: "raisedByUser" });
+Complaint.belongsTo(Seller, { foreignKey: "raisedBySellerId", as: "raisedBySeller" });
+
+// Complaint against
+Complaint.belongsTo(User, { foreignKey: "againstUserId", as: "againstUser" });
+Complaint.belongsTo(Seller, { foreignKey: "againstSellerId", as: "againstSeller" });
+
+// Related entities
+Complaint.belongsTo(Product, { foreignKey: "productId", as: "product" });
+Complaint.belongsTo(Order, { foreignKey: "orderId", as: "order" });
+
+// Resolved by Admin
+Complaint.belongsTo(Admin, { foreignKey: "resolvedBy", as: "resolvedByAdmin" });
 
 
 // Root
