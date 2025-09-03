@@ -10,7 +10,7 @@ const Order = require("../models/Order");
 const OrderItem =require("../models/OrderItem");
 const Review =require("../models/Review");
 const sequelize =require("../config/db");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const Seller = require("../models/Seller");
 
 // ✅ Register Admin
@@ -370,5 +370,29 @@ exports.giveAccesstoSeller = async (req,res) => {
   }catch{
     console.error();
     res.status(500).json("Error Founded, Failed to Give Access");
+  }
+};
+
+exports.getProductsBySellerId = async (req, res) => {
+  try {
+    const { sellerId } = req.params;
+
+
+    if (!sellerId) {
+      return res.status(400).json({ error: "Seller ID is required" });
+    }
+
+    const products = await Product.findAll({
+      where: { sellerId }
+    });
+
+    if (!products || products.length === 0) {
+      return res.status(404).json({ error: "No products found for this seller" });
+    }
+
+    res.json(products);
+  } catch (err) {
+    console.error("Error in getProductsBySellerId:", err);
+    res.status(500).json({ error: "Error fetching products" });
   }
 };

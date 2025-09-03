@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 
+
 const Brand = sequelize.define("Brand", {
   id: {
     type: DataTypes.INTEGER,
@@ -24,7 +25,15 @@ const Brand = sequelize.define("Brand", {
   isFeatured: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
-  }
+  },
+  sellerId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: "sellers",
+      key: "id"
+    }
+}
 }, {
   timestamps: true,
   tableName: "Brands"   // 👈 force lowercase

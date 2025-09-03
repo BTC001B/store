@@ -9,12 +9,21 @@ const OrderItem = require("../models/OrderItem");
 // ➕ Create Product
 exports.createProduct = async (req, res) => {
   try {
-    const product = await Product.bulkCreate(req.body);
-    res.status(201).json(product);
+    const sellerId = req.user.id;
+
+    const productsData = req.body.map(product => ({
+      ...product,
+      sellerId
+    }));
+
+    const products = await Product.bulkCreate(productsData);
+
+    res.status(201).json(products);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
 
 
 // 📦 Get All Products (public)

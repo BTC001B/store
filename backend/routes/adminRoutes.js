@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const adminController = require("../controllers/adminController");
 const { authMiddleware } = require("../middleware/authMiddleware"); // updated middleware
-
+const sellerController=require("../controllers/sellerController");
+const userController=require("../controllers/userController");
 // ✅ Auth Routes
 router.post("/register", adminController.register);
 router.post("/login", adminController.login);
@@ -15,10 +16,12 @@ router.post("/reset", adminController.forgotPasswordReset);
 // ✅ Protected Admin Routes
 router.get("/dashboard", authMiddleware(["admin", "superadmin"]), adminController.getDashboard);
 router.get("/all", authMiddleware(["admin", "superadmin"]), adminController.getAllAdmins);
-
+router.get("/user/",userController.getAllUsers);
 // Block/Unblock Users
 router.post("/block/userid/:userId", authMiddleware(["admin", "superadmin"]), adminController.blockUser);
 router.post("/unblock/userid/:userId", authMiddleware(["admin", "superadmin"]), adminController.unblockUser);
+router.patch("/:id/block",  authMiddleware(["admin", "superadmin"]), sellerController.blockUnblockSeller); 
+router.delete("/:id",  authMiddleware(["admin", "superadmin"]), sellerController.deleteSeller);  
 
 // ✅ Analytics (admin-only)
 router.get("/analytics/top-products", authMiddleware(["admin", "superadmin"]), adminController.getTopSellingProducts);
@@ -28,5 +31,9 @@ router.get("/analytics/product-ratings", authMiddleware(["admin", "superadmin"])
 router.get("/analytics/category-performance", authMiddleware(["admin", "superadmin"]), adminController.getCategoryPerformance);
 
 router.put("/seller/:sellerId",authMiddleware(["admin", "superadmin"]),adminController.giveAccesstoSeller)
+
+router.get("/all", authMiddleware(["admin"]), sellerController.getAllSellers);
+router.get("/id/:id", authMiddleware(["admin"]), sellerController.getSellerById);
+router.delete("/delete/:id", authMiddleware(["admin"]), sellerController.deleteSeller);
 
 module.exports = router;

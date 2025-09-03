@@ -12,7 +12,8 @@ const ProductViewHistory=require("./models/ProductViewHistory");
 const Brand = require("./models/Brand");
 const Review=require("./models/Review");
 const Profile = require("./models/Profile");
-const SearchHistory=require("./models/SearchHistory")
+const SearchHistory=require("./models/SearchHistory");
+const Seller=require("./models/Seller");
 const authRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
@@ -84,6 +85,10 @@ Profile.belongsTo(User, { foreignKey: "userId", as: "user" });
 
 User.hasMany(SearchHistory, { foreignKey: "userId", as: "searchHistories" });
 SearchHistory.belongsTo(User, { foreignKey: "userId", as: "user" });
+
+Seller.hasMany(Brand, { foreignKey: "sellerId", });
+Brand.belongsTo(Seller, { foreignKey: "sellerId" });
+
 
 // Root
 app.get("/", (req, res) => {

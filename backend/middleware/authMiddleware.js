@@ -10,9 +10,12 @@ exports.authMiddleware = (allowedRoles = []) => {
       }
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      console.log(decoded);
 
       if (!decoded || (allowedRoles.length && !allowedRoles.includes(decoded.role))) {
+        console.log(allowedRoles);
         return res.status(403).json({ error: "Forbidden. Not authorized." });
+        
       }
 
       req.user = decoded; // attach payload (id, role)

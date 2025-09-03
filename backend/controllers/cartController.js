@@ -6,7 +6,8 @@ const User = require("../models/User"); // assuming User model exists
 // 🛒 Add product to cart
 exports.addToCart = async (req, res) => {
   try {
-    const { userId, productId, quantity } = req.body;
+   
+    const { userId,productId, quantity } = req.body;
 
     // check product exists
     const product = await Product.findByPk(productId);

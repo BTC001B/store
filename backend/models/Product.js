@@ -40,7 +40,16 @@ const Product = sequelize.define('Product', {
   averageRating: { type: DataTypes.FLOAT, defaultValue: 0 },
   isFeatured: { type: DataTypes.BOOLEAN, defaultValue: false },
   isDeleted: { type: DataTypes.BOOLEAN, defaultValue: false },
-  createdBy: { type: DataTypes.STRING, allowNull: true }
+  createdBy: { type: DataTypes.STRING, allowNull: true },
+  sellerId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: "sellers",
+      key: "id"
+    }
+}
+
 
 }, {
   timestamps: true,
