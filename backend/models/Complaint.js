@@ -92,7 +92,7 @@ const Complaint = sequelize.define("Complaint", {
     type: DataTypes.INTEGER,
     allowNull: true,
     references: {
-      model: "Admins",
+      model: "Admin",
       key: "id",
     },
   },
