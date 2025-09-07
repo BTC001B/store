@@ -138,7 +138,7 @@ app.get("/", (req, res) => {
 // Sync DB and Start server
 const PORT = process.env.PORT || 5000;
 sequelize
-  .sync({alter:true})
+  .sync({force:true})
   .then(() => {
     console.log("✅ Database connected & synced");
     app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
