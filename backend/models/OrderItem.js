@@ -6,6 +6,10 @@ const OrderItem = sequelize.define("OrderItem", {
   orderId: { type: DataTypes.INTEGER, allowNull: false },
   productId: { type: DataTypes.INTEGER, allowNull: false },
   quantity: { type: DataTypes.INTEGER, allowNull: false },
+  status: { // order lifecycle
+    type: DataTypes.ENUM("Pending", "Processing", "Shipped", "Delivered", "Cancelled"),
+    defaultValue: "Pending"
+  },
   price: { type: DataTypes.FLOAT, allowNull: false }, // snapshot of product price at purchase
   totalPrice: { type: DataTypes.FLOAT, allowNull: false }
 }, {

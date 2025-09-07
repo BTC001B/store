@@ -248,7 +248,7 @@ exports.getOrderedItemsBySeller = async (req, res) => {
         {
           model: Order,
           as: "order", 
-          attributes: ["id", "status", "totalAmount", "createdAt", "userId"]
+          attributes: ["id", "totalAmount", "createdAt", "userId"]
         }
       ],
       order: [["createdAt", "DESC"]] // latest first
@@ -311,29 +311,23 @@ const todayOrderCount = await OrderItem.count({
       col: "orderId"
     });
 
-    const orderStatusCounts = await Order.findAll({
-      attributes: [
-        "status",
-        [fn("COUNT", col("Order.id")), "count"]   // ✅ disambiguated
-      ],
-      include: [
-        {
-          model: OrderItem,
-          as: "items",
-          attributes: [],
-          include: [
-            {
-              model: Product,
-              as: "product",
-              attributes: [],
-              where: { sellerId }
-            }
-          ]
-        }
-      ],
-      group: ["Order.status"],
-      raw: true
-    });
+const orderStatusCounts = await OrderItem.findAll({
+  attributes: [
+    "status", // take status from OrderItem
+    [fn("COUNT", col("OrderItem.id")), "count"]
+  ],
+  include: [
+    {
+      model: Product,
+      as: "product",
+      attributes: [],
+      where: { sellerId }
+    }
+  ],
+  group: ["OrderItem.status"], // group by OrderItem.status
+  raw: true
+});
+
 
    const totalProducts = await Product.count({
   where: { sellerId: sellerId }

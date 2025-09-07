@@ -16,6 +16,8 @@ const SearchHistory=require("./models/SearchHistory");
 const Seller=require("./models/Seller");
 const Complaint=require("./models/Complaint");
 const Admin=require("./models/Admin");
+const Return=require("./models/Return")
+const ReturnItem=require("./models/ReturnItems");
 const authRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
@@ -29,6 +31,7 @@ const adminRoutes = require("./routes/adminRoutes");
 const searchRoutes=require("./routes/searchRoutes");
 const sellerRoutes = require("./routes/sellerRoutes");
 const complaintRoutes = require("./routes/complaintRoutes");
+const returnRoutes =require("./routes/returnRoutes");
 
 
 
@@ -54,6 +57,7 @@ app.use("/api/admin",adminRoutes);
 app.use("/api/searchbar",searchRoutes);
 app.use("/api/seller",sellerRoutes);
 app.use("/api/complaint",complaintRoutes);
+app.use("/api/return",returnRoutes);
 app.use("/uploads", express.static("uploads"));
 
 
@@ -105,6 +109,22 @@ Complaint.belongsTo(Seller, { foreignKey: "againstSellerId", as: "againstSeller"
 // Related entities
 Complaint.belongsTo(Product, { foreignKey: "productId", as: "product" });
 Complaint.belongsTo(Order, { foreignKey: "orderId", as: "order" });
+
+// User ↔ Return
+User.hasMany(Return, { foreignKey: "userId", as: "returns" });
+Return.belongsTo(User, { foreignKey: "userId", as: "user" });
+
+// Order ↔ Return
+Order.hasMany(Return, { foreignKey: "orderId", as: "returns" });
+Return.belongsTo(Order, { foreignKey: "orderId", as: "order" });
+
+// Return ↔ ReturnItem
+Return.hasMany(ReturnItem, { foreignKey: "returnId", as: "items" });
+ReturnItem.belongsTo(Return, { foreignKey: "returnId", as: "return" });
+
+// OrderItem ↔ ReturnItem
+OrderItem.hasMany(ReturnItem, { foreignKey: "orderItemId", as: "returnItems" });
+ReturnItem.belongsTo(OrderItem, { foreignKey: "orderItemId", as: "orderItem" });
 
 // Resolved by Admin
 Complaint.belongsTo(Admin, { foreignKey: "resolvedBy", as: "resolvedByAdmin" });

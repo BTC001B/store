@@ -11,6 +11,8 @@ router.post("/register", sellerController.registerSeller);
 router.post("/login", sellerController.loginSeller);
 router.put("/update",authMiddleware(["seller"]),sellerController.updateSeller);
 router.get("/ownprofile", authMiddleware(["seller"]), sellerController.getSellerProfile);
+router.delete("/delete/:id",authMiddleware(["seller","admin"]),sellerController.deleteSeller);
+router.get("/get/sellerid/:id",authMiddleware(["seller","admin"]),sellerController.getSellerById);
 
 // Seller product management
 router.post('/product', authMiddleware(["seller"]), productController.createProduct);

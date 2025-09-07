@@ -23,4 +23,8 @@ router.put("/orderid/:orderId/cancel", orderController.cancelOrder);
 
 router.get("/orders",orderController.getAllOrders);
 
+router.put("/update/orderitem/:id",orderController.updateOrderItemStatus);
+
+router.get("/orderitems/:id",orderController.getOrderItemById);
+
 module.exports = router;

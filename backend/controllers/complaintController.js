@@ -103,8 +103,9 @@ exports.getComplaintsByUser = async (req, res) => {
     const { userId } = req.params;  
     if (!userId) return res.status(400).json({ message: "userId is required" });
 
-    const complaints = await Complaint.findAll({ where: { raisedByUserId: userId } });
-    res.json({ data: complaints });
+    const complaints1 = await Complaint.findAll({ where: { raisedByUserId: userId } });
+    const complaints2 = await Complaint.findAll({ where: { againstUserId: userId } });
+    res.json({ complaintByUs: complaints1 , complaintOnUs: complaints2});
   } catch (error) {
     console.error("Error in getComplaintsByUser:", error);
     res.status(500).json({ message: "Error fetching complaints", error: error.message });
@@ -118,8 +119,10 @@ exports.getComplaintsBySeller = async (req, res) => {
     const { sellerId } = req.params;
     if (!sellerId) return res.status(400).json({ message: "sellerId is required" });
 
-    const complaints = await Complaint.findAll({ where: { raisedBySellerId: sellerId } });
-    res.json({ data: complaints });
+    const complaints1 = await Complaint.findAll({ where: { raisedBySellerId: sellerId } });
+    const complaints2 = await Complaint.findAll({ where: { againstSellerId: sellerId } });
+    res.json({ complaintByUs: complaints1 , complaintOnUs: complaints2});
+
   } catch (error) {
     console.error("Error in getComplaintsBySeller:", error);
     res.status(500).json({ error: "Server error" });

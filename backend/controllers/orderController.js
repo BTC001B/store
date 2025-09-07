@@ -121,6 +121,21 @@ exports.getOrderById = async (req, res) => {
   }
 };
 
+exports.getOrderItemById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const order = await OrderItem.findByPk(id);
+
+    if (!order) return res.status(404).json({ error: "Order item not found" });
+
+    res.json(order);
+  } catch (error) {
+    console.error("Error fetching order item:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 
 // ✅ Update Order Status (Admin)
 exports.updateOrderStatus = async (req, res) => {
@@ -129,6 +144,24 @@ exports.updateOrderStatus = async (req, res) => {
     const { status } = req.body;
 
     const order = await Order.findByPk(orderId);
+    if (!order) return res.status(404).json({ error: "Order not found" });
+
+    order.status = status;
+    await order.save();
+
+    res.json({ message: "Order status updated", status });
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+exports.updateOrderItemStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const order = await OrderItem.findByPk(id);
     if (!order) return res.status(404).json({ error: "Order not found" });
 
     order.status = status;

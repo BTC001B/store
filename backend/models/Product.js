@@ -14,7 +14,7 @@ const Product = sequelize.define('Product', {
   slug: { type: DataTypes.STRING, allowNull: false, unique: true },
   shortDescription: { type: DataTypes.STRING, allowNull: true },
   description: { type: DataTypes.TEXT, allowNull: true },
-  image: { type: DataTypes.STRING, allowNull: false },
+  image: { type: DataTypes.STRING, allowNull: true },
   price: { type: DataTypes.FLOAT, allowNull: false },
   stock: { type: DataTypes.INTEGER, allowNull: false },
   sku: { type: DataTypes.STRING, allowNull: true, unique: true },
